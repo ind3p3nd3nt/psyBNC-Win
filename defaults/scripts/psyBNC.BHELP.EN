@@ -1,0 +1,404 @@
+DELSERVER4
+your connection or you have +r (restricted) connection you can delete them.
+main41
+USE: BHELP Use /QUOTE bhelp <command> for details.
+PLAYTRAFFICLOG2
+USAGE: /quote PLAYTRAFFICLOG
+BCONNECT4
+Example
+DELSERVER5
+Use /LISTERVERS to get the server number that you want to delete.
+main42
+BHELP - End of help
+main18
+BHELP $spaces(3) TRANSLATE $spaces(7) - Adds a translator to/from channels/users
+BCONNECT5
+/BCONNECT
+PLAYPRIVATELOG2
+-------------------------
+DELSERVER6
+Example:
+main19
+BHELP $spaces(3) DELTRANSLATE $spaces(4) - Deletes a translator by number
+BCONNECT6
+See also: BQUIT
+TRANSLATE8
+- English to Portugese $spaces(8) en_pt
+PLAYPRIVATELOG3
+displays logged msges. When you are away all private chats
+DELSERVER7
+/DELSERVER 5
+PASSWORD10
+If you want to list users in your bouncer use /BWHO command !
+main28
+BHELP * BKILL $spaces(11) - Kills a User from the proxy
+TRANSLATE9
+- English to Chinese $spaces(10) en_zh
+ERASETRAFFICLOG2
+USAGE: /quote ERASETRAFFICLOG
+PLAYTRAFFICLOG1
+PLAYTRAFFICLOG - Plays channels log file.
+DELSERVER8
+See also: ADDSERVER LISTSERVER
+main29
+BHELP * SOCKSTAT $spaces(8) - Shows/Logs the current Connections
+main1
+$logo Help (* = BounceAdmin only)
+ERASEPRIVATELOG2
+--------------------------
+PLAYPRIVATELOG1
+PLAYPRIVATELOG [network']
+JUMP12
+See also: LISTSERVERS ADDSERVER DELSERVER
+main38
+BHELP * PLAYMAINLOG $spaces(5) - Plays the Connection Log
+BCONNECT1
+BCONNECT [network']
+main2
+--------------------------------------
+ERASEPRIVATELOG3
+erases your logged messages. In order to keep your log up to date you should
+main39
+BHELP * ERASEMAINLOG $spaces(4) - Erases the Connection Log
+ERASETRAFFICLOG1
+ERASETRAFFICLOG - Deletes channels log file.
+BCONNECT2
+-------------------
+main3
+BHELP $spaces(3) BWHO $spaces(12) - Lists all Users on the Bouncer
+JUMP10
+Example:
+BCONNECT3
+Connects bouncer back to the network
+main4
+BHELP $spaces(3) PASSWORD $spaces(8) - Sets your or another Users Password(Admin)
+ERASEPRIVATELOG1
+ERASEPRIVATELOG [network']
+PLAYPRIVATELOG4
+and messages get logged. In order to read them you must use /PLAYPRIVATELOG.
+JUMP11
+JUMP
+main5
+BHELP $spaces(3) PROXY $spaces(11) - Sets your proxy to connect thru
+PLAYPRIVATELOG5
+See also: ERASEPRIVATELOG PLAYMAINLOG ERASEMAINLOG PLAYTRAFFICLOG ERASETRAFFICLOG
+main6
+BHELP $spaces(3) SETUSERNAME $spaces(5) - Sets your User Name
+main7
+BHELP $spaces(3) SETAWAY $spaces(9) - Sets your away-Text when you leave
+SETLEAVEMSG2
+USAGE: /quote SETLEAVEMSG <message>
+ERASEPRIVATELOG4
+delete the messages that you allready read using /PLAYPRIVATELOG.
+main8
+BHELP $spaces(3) SETLEAVEMSG $spaces(5) - Sets your Leave-MSG when you leave
+ERASEPRIVATELOG5
+See also: PLAYPRIVATELOG PLAIMAINLOG ERASEMAINLOG PLAYTRAFFICLOG ERASETRAFFICLOG
+BQUIT4
+Example:
+main9
+BHELP $spaces(3) LEAVEQUIT $spaces(7) - If set to 1, parts all channels on quit
+BQUIT5
+/BQUIT
+DELTRANSLATE2
+-----------------------------
+SETLEAVEMSG1
+SETLEAVEMSG - Sets the message that will be leaved to channels on disconnection.
+BQUIT6
+See also: BCONNECT
+DELTRANSLATE3
+DELTRANSLATE allows you to remove an added translator entry from
+UNADMIN1
+UNADMIN user
+UNADMIN2
+------------
+PASSWORD8
+PASSWORD newbie :lamer
+DELTRANSLATE1
+DELTRANSLATE [network']number
+UNADMIN3
+removes user with ADMIN rights in bouncer
+BQUIT1
+BQUIT [network']
+SETAWAYNICK2
+USAGE: /quote SETAWAYNICK <nickname>
+PASSWORD9
+Changes password for user newbie into lamer)
+DELTRANSLATE6
+Example:
+UNADMIN4
+Example:
+BQUIT2
+----------------
+DELTRANSLATE7
+DELTRANSLATE 3
+UNADMIN5
+UNADIM Lamer
+BQUIT3
+quits the server connection until you restart it with BCONNECT.
+DELTRANSLATE4
+the list of formerly added translators. See /LISTTRANSLATE to get
+UNADMIN6
+See also: MADMIN
+SETAWAYNICK1
+SETAWAYNICK - Sets the nickname that will be used on disconnection.
+DELTRANSLATE5
+the number of the context to be removed.
+PLAYMAINLOG2
+-----------
+PLAYMAINLOG3
+displays the bouncer system log. All system changes like bouncer
+DELTRANSLATE8
+would remove entry 3 from the list of translators.
+PLAYMAINLOG1
+PLAYMAINLOG
+BHELP1
+BHELP
+DELTRANSLATE9
+See also: TRANSLATE LISTTRANSLATE
+BHELP2
+-----
+PASSWORD1
+PASSWORD [user] :newpass
+BHELP3
+This help
+PASSWORD2
+------------------------
+PLAYMAINLOG4
+link, connections, quits etc. are logged here.
+PASSWORD3
+changes Password of you or given user. Make sure you remember your passwords !
+PLAYMAINLOG5
+See also: PLAYPRIVATELOG ERASEPRIVATELOG ERASEMAINLOG PLAYTRAFFICLOG ERASETRAFFICLOG
+PASSWORD4
+Example:
+BNOTICE2
+USAGE: /quote BNOTICE <USERNAME/GLOBAL> <notice>
+PASSWORD5
+PASSWORD NewPassword
+LISTSERVERS4
+See also: DELSERVER ADDSERVER
+LISTTRANSLATE2
+-----------------------------
+PASSWORD6
+(changes your password)
+DELTRANSLATE10
+
+LISTTRANSLATE3
+LISTTRANSLATE allows you to list all added translator entry from
+PASSWORD7
+or
+LISTSERVERS2
+----------------------
+BNOTICE1
+BNOTICE - Allows the administrators to send notices to an user.
+TRANSLATE32
+See also: DELTRANSLATE LISTTRANSLATE
+TRANSLATE20
+- Russian to English $spaces(10) ru_en
+TRANSLATE16
+- French to English $spaces(11) fr_en
+LISTSERVERS3
+displays your serverlist.
+LISTTRANSLATE1
+LISTTRANSLATE [network']
+TRANSLATE21
+- Spanish to English $spaces(10) es_en
+TRANSLATE17
+- Portugese to English $spaces(8) pt_en
+TRANSLATE30
+you would post to #italia, would be translated from
+TRANSLATE22
+- French to German $spaces(12) fr_de
+TRANSLATE14
+- Deutsch to English $spaces(10) de_en
+LISTSERVERS1
+LISTSERVERS [network']
+BKILL1
+BKILL user
+TRANSLATE31
+english into italian.
+TRANSLATE23
+- German to French $spaces(12) de_fr
+TRANSLATE15
+- Italian zu English $spaces(10) it_en
+BKILL2
+----------
+LISTTRANSLATE4
+the list of formerly added translators.
+TRANSLATE24
+You need to set a channel or a user to be translated and two
+TRANSLATE12
+- English to Spanish $spaces(10) en_es
+JUMP8
+JUMP command is also used to trigger VHOSTS or in other situations when
+BKILL3
+You can close user connection with BKILL.
+LISTTRANSLATE5
+See also: TRANSLATE DELTRANSLATE
+TRANSLATE25
+of the language identifiers (see behind the languages).
+TRANSLATE13
+- English to Russian $spaces(10) en_ru
+JUMP9
+displayed.
+BKILL4
+Example:
+TRANSLATE26
+Example:
+TRANSLATE10
+- English to Japanese $spaces(9) en_ja
+BKILL5
+BKILL lamer
+ERASEMAINLOG2
+------------
+TRANSLATE27
+/TRANSLATE #italia :it_en en_it
+TRANSLATE11
+- English to Korean $spaces(11) en_ko
+BKILL6
+See also: DELUSER
+ERASEMAINLOG3
+erases the bouncer system log. In order to keep your log up to
+BWHO6
+other bouncers.
+TRANSLATE28
+So everything you would get FROM the channel #italia
+SETAWAY2
+USAGE: /quote SETAWAY <message>
+JUMP4
+from LISTSERVERS.
+ADDUSER1
+ADDUSER - Adds users in the user list, so they can log in psyBNC.
+main36
+BHELP $spaces(3) LISTLINKS $spaces(7) - Lists all Links to/from the Bouncer
+main24
+BHELP $spaces(3) PLAYTRAFFICLOG $spaces(2) - Plays the Traffic Log
+main12
+BHELP $spaces(3) BCONNECT $spaces(8) - Reconnects a bquitted Connection
+TRANSLATE29
+would be translated from italian to english, and in return everything
+JUMP5
+If you are in LAG or something else is wrong you can
+ADDUSER2
+USAGE: /quote ADDUSER <user> <password>
+ERASEMAINLOG1
+ERASEMAINLOG
+ADDSERVER1
+ADDSERVER [network'][S=]server :port password
+BWHO4
+hat means that the user is logged in. With this command you can also see the up
+main37
+BHELP * RELINK $spaces(10) - Resets a link to a bouncer by number
+main25
+BHELP $spaces(3) ERASETRAFFICLOG - Erases the Traffic Log
+main13
+BHELP $spaces(3) AIDLE $spaces(11) - Enables/Disables Antiidle
+TRANSLATE2
+------------------------------------------------------------
+JUMP6
+force bouncer to change servers. In order to do that you must have
+ADDSERVER2
+---------------------------------------------
+BWHO5
+links to (<-) and from (->) your bouncer. That is if you have bouncer linked to
+main34
+BHELP * LINKFROM $spaces(8) - Adds a bouncer Link from your Bouncer
+main26
+BHELP * MADMIN $spaces(10) - Gives a User an Admin flag
+main10
+BHELP $spaces(3) SETAWAYNICK $spaces(5) - Sets your nick when you are offline
+TRANSLATE3
+Translate allows you to set channels or users to be online translated.
+SETAWAY1
+SETAWAY - Sets your away message that will be displayed on disconnection.
+JUMP7
+atleast two IRC servers added in ServerList (See /addserver)
+DELUSER1
+DELUSER login
+ADDSERVER3
+adds a new IRC server. You can add many servers. If the bouncer can't connect
+BWHO2
+----
+main35
+BHELP * DELLINK $spaces(9) - Deletes a Link to a bouncer
+main27
+BHELP * UNADMIN $spaces(9) - Removes the Admin flag from a User
+main11
+BHELP $spaces(3) JUMP $spaces(12) - Jumps to the next IRC-Server
+DELUSER2
+-------------
+ERASEMAINLOG4
+date you should delete the bouncer system log after you examine it.
+ADDSERVER4
+to a server it will try next one in list.
+BWHO3
+Lists all Users on the bouncer. If user has a "*" in front of his nick t
+main32
+BHELP * NAMEBOUNCER $spaces(5) - Names your bouncer (needed for linking)
+main20
+BHELP $spaces(3) LISTTRANSLATE $spaces(3) - Shows a List of translated talks
+main16
+BHELP $spaces(3) DELSERVER $spaces(7) - Deletes an IRC-Server by number
+TRANSLATE1
+TRANSLATE [network']#channel/user :language-from language-to
+JUMP1
+JUMP [network'] :[number]
+DELUSER3
+deletes a bouncer user. You must be Bouncer Admin in order to
+ERASEMAINLOG5
+See also: PLAYPRIVATELOG ERASEPRIVATELOG PLAYMAINLOG PLAYTRAFFICLOG ERASETRAFFICLOG
+ADDSERVER5
+Example:
+main33
+BHELP * LINKTO $spaces(10) - Adds a bouncer Link to the Host/Port
+main21
+BHELP $spaces(3) ADDLOG $spaces(10) - Adds a Log source / filter
+main17
+BHELP $spaces(3) LISTSERVERS $spaces(5) - Lists all IRC-Servers added
+TRANSLATE18
+- Japanese to English $spaces(9) ja_en
+TRANSLATE6
+- English to Italian $spaces(10) en_it
+JUMP2
+-------------------------
+DELUSER4
+delete a user. Example: /deluser newbie
+DELSERVER1
+DELSERVER [network'] :servernumber
+ADDSERVER6
+ADDSERVER irc.stealth.net :6667
+BWHO1
+BWHO
+main30
+BHELP * ADDUSER $spaces(9) - Adds a new User to the Bouncer
+main22
+BHELP $spaces(3) DELLOG $spaces(10) - Deletes a Log source by number
+main14
+BHELP $spaces(3) AUTOREJOIN $spaces(6) - Enables/Disables Auto-Rejoin
+TRANSLATE19
+- Korean to English $spaces(11) ko_en
+TRANSLATE7
+- English to French $spaces(11) en_fr
+JUMP3
+jumps to next server, if no servernumber is given, or to the server by number
+DELUSER5
+See also: ADDUSER
+DELSERVER2
+----------------------------------
+ADDSERVER7
+See also :DELSERVER LISTSERVERS
+main31
+BHELP * DELUSER $spaces(9) - Deletes a User from the Bouncer
+main23
+BHELP $spaces(3) LISTLOGS $spaces(8) - Lists all added Log sources/filters
+main15
+BHELP $spaces(3) ADDSERVER $spaces(7) - Adds an IRC-Server to your Serverlist
+TRANSLATE4
+Currently possibly are the following translations:
+DELSERVER3
+Deletes Server. If you find out that some IRC servers are LAGGED or don't allow
+main40
+BHELP $spaces(3) BHELP $spaces(11) - Lists this help or help on a topic
+TRANSLATE5
+- English to German $spaces(11) en_de
