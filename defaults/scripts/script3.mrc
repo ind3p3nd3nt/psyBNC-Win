@@ -81,8 +81,8 @@ alias init {
     if (%lines < $lines(system.log)) { .play -af $+ %lines opnotice %fldchan system.log 800 }
     set %lines $lines(system.log)
     return
-
   }
+}
 
 alias chklog {
   if ($isfile($shortfn(CCFinder.log))) && ($server) {
